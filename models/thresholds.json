@@ -1,0 +1,27 @@
+{
+    "consumer": {
+        "threshold": 0.34103989631162035,
+        "precision": 0.7927710843373494,
+        "recall": 0.9500825082508251,
+        "rule": "max threshold with recall>=0.95"
+    },
+    "corporate_strict": {
+        "threshold": 1.0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "rule": "max threshold with precision>=0.95"
+    },
+    "corporate_balanced_f0.5": {
+        "threshold": 0.6549837521950335,
+        "precision": 0.9610042735042735,
+        "recall": 0.7421617161716172,
+        "f0.5": 0.9074858757062149,
+        "rule": "maximize F0.5"
+    },
+    "corporate_balanced_precision90": {
+        "threshold": 1.0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "rule": "max threshold with precision>=0.9"
+    }
+}

@@ -1,0 +1,59 @@
+from pathlib import Path
+import joblib
+import pandas as pd
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    average_precision_score,
+)
+
+TRAIN_PATH = Path("data/processed/train2.parquet")
+TEST_PATH = Path("data/processed/test.parquet")
+MODEL_PATH = Path("models/baseline_tfidf_lr.joblib")
+
+def main():
+    train_df = pd.read_parquet(TRAIN_PATH)
+    test_df = pd.read_parquet(TEST_PATH)
+
+    X_train, y_train = train_df["text"], train_df["label"]
+    X_test, y_test = test_df["text"], test_df["label"]
+
+    model = Pipeline(
+        steps=[
+            ("tfidf", TfidfVectorizer(
+                lowercase=True,
+                ngram_range=(1, 2),
+                min_df=2,
+                max_df=0.9,
+                stop_words="english"  # dataset looks EN; we can revisit later
+            )),
+            ("clf", LogisticRegression(
+                max_iter=2000,
+                n_jobs=None  # keep compatible; some sklearn versions ignore n_jobs
+            )),
+        ]
+    )
+
+    model.fit(X_train, y_train)
+
+    # Predictions
+    y_pred = model.predict(X_test)
+    y_proba = model.predict_proba(X_test)[:, 1]
+
+    # Metrics
+    pr_auc = average_precision_score(y_test, y_proba)
+    print(f"PR-AUC: {pr_auc:.4f}\n")
+    print("Confusion matrix:\n", confusion_matrix(y_test, y_pred), "\n")
+    print(classification_report(y_test, y_pred, digits=4))
+
+    # Save model
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, MODEL_PATH)
+    print(f"\nSaved model to {MODEL_PATH}")
+
+if __name__ == "__main__":
+    main()
