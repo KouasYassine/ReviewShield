@@ -6,18 +6,12 @@ OUT_PATH = Path("data/processed/reviews_labeled.parquet")
 
 def main():
     df = pd.read_csv(RAW_PATH)
-
-    # rename columns to a stable schema
     df = df.rename(columns={"text_": "text"})
 
-    # keep only what we need
     df = df[["text", "label", "rating", "category"]].copy()
 
-    # basic cleaning
     df["text"] = df["text"].astype(str).str.strip()
     df = df[df["text"].str.len() > 0].drop_duplicates(subset=["text", "label"])
-
-    # show label distribution
     print("Shape:", df.shape)
     print("Labels:\n", df["label"].value_counts(dropna=False))
     print("Rating stats:\n", df["rating"].describe())

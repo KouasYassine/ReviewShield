@@ -22,22 +22,25 @@ def main():
     X_train, y_train = train_df["text"], train_df["label"]
     X_test, y_test = test_df["text"], test_df["label"]
 
+
     model = Pipeline(
         steps=[
             ("tfidf", TfidfVectorizer(
-                lowercase=True,
-                ngram_range=(1, 2),
-                min_df=2,
-                max_df=0.9,
-                stop_words="english"  # dataset looks EN; we can revisit later
+                analyzer='char_wb',
+                ngram_range=(3, 5),
+                min_df=10,
+                max_features=60000,
+                lowercase=True
             )),
             ("clf", LogisticRegression(
-                max_iter=2000,
-                n_jobs=None  # keep compatible; some sklearn versions ignore n_jobs
+                max_iter=5000,
+                class_weight='balanced',
+                solver='saga',
+                n_jobs=-1,
+                random_state=42
             )),
         ]
     )
-
     model.fit(X_train, y_train)
 
     # Predictions

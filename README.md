@@ -1,5 +1,7 @@
 # ReviewShield
 
-Trust & Safety project:
-- Detect suspicious/fake reviews (NLP)
-- Detect coordinated/bot-like behavior (patterns/graph)
+Trust & Safety project utilisant le dataset Yelp.
+
+- Ingestion : `src/ingest/sample_reviews.py`
+- Analyse : `src/ingest/logic.py`
+- Dashboard : `app.py`

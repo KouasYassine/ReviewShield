@@ -1,13 +1,28 @@
+# Python environments and cache
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
 
-data/raw/
-data/processed/
+# Local datasets
+data/
 *.parquet
-*.csv
 
+# Large transformer checkpoints
+models/distilbert/
+models/distilbert_clean/
+models/distilbert_v2/
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Experiment outputs
+results/
+output.png
+
+# Secrets and local configuration
 .env
-Thumbs.db
-.DS_Store
-
+.env.*
+!.env.example

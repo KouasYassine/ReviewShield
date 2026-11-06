@@ -33,12 +33,12 @@ def build_pipeline():
     )
 
 def main():
-    # 1) Load data
+
     train2_df = pd.read_parquet(TRAIN2_PATH)
     val_df = pd.read_parquet(VAL_PATH)
     test_df = pd.read_parquet(TEST_PATH)
 
-    # 2) Train_full = train2 + val
+
     train_full = pd.concat([train2_df, val_df], ignore_index=True)
 
     X_train_full = train_full["text"]
@@ -50,11 +50,9 @@ def main():
     print(f"train_full shape: {train_full.shape} | label dist: {train_full['label'].value_counts().to_dict()}")
     print(f"test shape:       {test_df.shape} | label dist: {test_df['label'].value_counts().to_dict()}")
 
-    # 3) Build base model (TF-IDF + LR)
     base_pipeline = build_pipeline()
 
-    # 4) Cross-validated calibration on train_full (no prefit needed)
-    # This trains models on folds and calibrates on held-out folds → robust calibration.
+
     calibrated = CalibratedClassifierCV(
         estimator=base_pipeline,
         method="sigmoid",
@@ -63,7 +61,7 @@ def main():
 
     calibrated.fit(X_train_full, y_train_full)
 
-    # 5) Evaluate on TEST only
+
     y_pred = calibrated.predict(X_test)
     y_proba = calibrated.predict_proba(X_test)[:, 1]
 
@@ -73,7 +71,7 @@ def main():
     print("Confusion matrix:\n", confusion_matrix(y_test, y_pred))
     print(classification_report(y_test, y_pred, digits=4))
 
-    # 6) Save model
+
     OUT_MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(calibrated, OUT_MODEL_PATH)
     print(f"\nSaved calibrated model to {OUT_MODEL_PATH}")

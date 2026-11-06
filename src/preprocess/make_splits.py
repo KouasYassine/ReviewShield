@@ -2,11 +2,11 @@ from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-IN_TRAIN = Path("data/processed/train.parquet")   # current 80%
-OUT_TRAIN = Path("data/processed/train2.parquet") # new train
-OUT_VAL = Path("data/processed/val.parquet")      # new validation
+IN_TRAIN = Path("data/processed/train.parquet")
+OUT_TRAIN = Path("data/processed/train2.parquet")
+OUT_VAL = Path("data/processed/val.parquet")
 
-VAL_SIZE = 0.15  # 15% of the current train (=> overall 12% of total)
+VAL_SIZE = 0.15
 
 def main():
     df = pd.read_parquet(IN_TRAIN)

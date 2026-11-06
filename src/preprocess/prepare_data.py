@@ -11,15 +11,14 @@ LABEL_MAP = {"OR": 0, "CG": 1}
 def main():
     df = pd.read_parquet(IN_PATH)
 
-    # rename text column and map labels
     df = df.rename(columns={"text_": "text"})
     df["label"] = df["label"].map(LABEL_MAP)
 
-    # basic cleanup
+
     df["text"] = df["text"].astype(str).str.strip()
     df = df[df["text"].str.len() > 0].drop_duplicates(subset=["text"])
 
-    # stratified split so classes stay balanced
+
     train_df, test_df = train_test_split(
         df,
         test_size=0.2,
