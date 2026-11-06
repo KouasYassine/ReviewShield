@@ -26,3 +26,4 @@ output.png
 .env
 .env.*
 !.env.example
+/models/tfidf_lr_clean.joblib
