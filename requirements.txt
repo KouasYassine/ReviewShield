@@ -1,7 +1,14 @@
-pandas
 numpy
-matplotlib
-seaborn
+pandas
+pyarrow
 scikit-learn
-streamlit
 joblib
+matplotlib
+streamlit
+fastapi
+uvicorn
+pytest
+# DistilBERT training / inference (GPU recommended)
+torch>=2.1
+transformers>=4.40
+tqdm

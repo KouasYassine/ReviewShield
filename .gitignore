@@ -1,29 +1,27 @@
-# Python environments and cache
+# Python
 .venv/
 venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 
-# Local datasets
-data/
-*.parquet
+# Datasets (download separately, see README)
+/data/
 
-# Large transformer checkpoints
-models/distilbert/
-models/distilbert_clean/
-models/distilbert_v2/
+# Transformer checkpoints (too large for git: publish as a GitHub Release / HF Hub)
+models/distilbert*/
 *.safetensors
 *.bin
 *.pt
 *.pth
 
-# Experiment outputs
-results/
-output.png
+# Large prediction dumps (metrics JSON/MD in results/ ARE committed)
+results/*predictions*.csv
+results/ood_analysis/
 
-# Secrets and local configuration
+# Secrets
 .env
 .env.*
 !.env.example
-/models/tfidf_lr_clean.joblib
+.DS_Store
+Thumbs.db

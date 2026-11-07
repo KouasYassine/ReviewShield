@@ -1,4 +1,8 @@
+"""Error analysis on the external AiGen-FoodReview set: score distributions,
+performance by review length (truncation), and the most confident mistakes.
 
+    python -m src.models.analyze_ood
+"""
 from pathlib import Path
 
 import joblib
@@ -24,13 +28,13 @@ from transformers import (
 DATA_PATH = Path(
     "data/external/aigen-foodreview/data/test.csv"
 )
-LR_PATH = Path("models/tfidf_lr_clean.joblib")
-BERT_PATH = Path("models/distilbert_clean")
-OUTPUT_DIR = Path("results/ood_analysis")
+from src.common import DISTILBERT_DIR as BERT_PATH, RESULTS_DIR, TFIDF_PATH as LR_PATH
+
+OUTPUT_DIR = RESULTS_DIR / "ood_analysis"
 
 THRESHOLD = 0.5
 BATCH_SIZE = 16
-MAX_LENGTH = 128
+MAX_LENGTH = 256  # must match the length used in training
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -211,7 +215,7 @@ for label, name in [(0, "HUMAN"), (1, "AI-GENERATED")]:
         subset["token_length"].median(), 2
     ))
 
-    print("Truncated at 128:", int(
+    print(f"Truncated at {MAX_LENGTH}:", int(
         subset["truncated"].sum()
     ), "/", len(subset))
 
